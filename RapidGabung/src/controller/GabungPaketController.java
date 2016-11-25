@@ -211,7 +211,7 @@ public class GabungPaketController implements Initializable {
 					String kdKotak = GabungPaketService.getKdKotakGabungPaketSessionTampilTableB(tujuan);
 					if (kdKotak == null || kdKotak.equals("")) {
 						String noResiKardus = GabungPaketService.getMaxCode(txt_kd_keranjang.getText().toUpperCase());
-						String formatD = DateUtil.getDateNotSeparator(DateUtil.getNow());
+						String formatD = DateUtil.getDateNotSeparator(DateUtil.fotoTimbangDateGenerateRule(new Date()));
 						finalNoAuto = tujuan.toUpperCase() + noResiKardus + "-" + formatD + uLogin.getKodeCabang();
 						txt_resi_kardus.setText(finalNoAuto);
 						sohwTableA();
