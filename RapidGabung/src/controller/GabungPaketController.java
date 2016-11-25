@@ -55,6 +55,8 @@ import util.WindowsHelper;
 
 public class GabungPaketController implements Initializable {
 
+	// coba gabung paket
+	
 	@FXML
 	TableView listTableA, listTableB;
 
