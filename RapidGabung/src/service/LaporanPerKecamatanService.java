@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +8,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import VO.BrowseSemuaDataVO;
-import util.DateUtil;
 import util.HibernateUtil;
 
 public class LaporanPerKecamatanService {
 
+	//FA
 	public static List<Map> getLaporanByParam(
 			Date startDate,
 			Date endDate,
@@ -25,9 +23,10 @@ public class LaporanPerKecamatanService {
 				"	distinct " + 
 		        "        a.awb_data_entry, " +
 		        "        a.tgl_create,  " +
-		        "        a.penerima,  " +
+//		        "        a.penerima,  " +
 		        "        a.tujuan, " +
 		        "        a.kode_perwakilan, " +
+		        "        b.zona,  " +	
 		        "        b.kecamatan,  " +
 		        "        b.kabupaten,  " +
 		        "        b.propinsi, " +

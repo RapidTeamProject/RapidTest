@@ -294,7 +294,7 @@ public class LapPerKecamatanController implements Initializable {
 //					(String) obj.get("PENERIMA"),
 					(String) obj.get("TUJUAN"),
 					(String) obj.get("KODE_PERWAKILAN"),
-					(String) obj.get("KODE_ZONA"),
+					(String) obj.get("ZONA"),
 					(String) obj.get("KECAMATAN"),
 					new String((String) obj.get("KABUPATEN")).toUpperCase(),
 					(String) obj.get("PROPINSI"),
@@ -335,8 +335,8 @@ public class LapPerKecamatanController implements Initializable {
 					return true;
 				}else if(data.getKodePerwakilan().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
-				}else if (data.getZona().toLowerCase().indexOf(lowerCaseFilter) != -1){
-					return true;
+//				}else if (data.getZona().toLowerCase().indexOf(lowerCaseFilter) != -1){
+//					return true;
 				}else if(data.getKecamatan().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
 				}else if(data.getKabupaten().toLowerCase().indexOf(lowerCaseFilter) != -1){
