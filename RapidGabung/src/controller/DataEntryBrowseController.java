@@ -45,10 +45,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import popup.PopUpTujuanBrowseController;
-import popup.PopUpTujuanController;
 import service.DataPaketService;
 import service.TujuanService;
-import service.UserService;
 import util.DateUtil;
 import util.DtoListener;
 import util.ManagedFormHelper;
@@ -110,7 +108,10 @@ public class DataEntryBrowseController implements Initializable {
 	double width;
 	double height;
 	private Boolean control = false;
-
+	
+	//FA
+	private int countUp = 0;
+	
 	public void initialize(URL url, ResourceBundle rb) {
 		ManagedFormHelper.instanceController = this;
 		setKodeTujuanListener();
@@ -206,6 +207,7 @@ public class DataEntryBrowseController implements Initializable {
 				reset(imgViewMainView, width, height);
 			}
 		});
+		
 		imgViewMainView.fitWidthProperty().bind(pane.widthProperty());
 		imgViewMainView.fitHeightProperty().bind(pane.heightProperty());
 		imgViewMainView.setRotate(180);
@@ -371,6 +373,76 @@ public class DataEntryBrowseController implements Initializable {
 			imgViewMainView.setRotate(180);
 			imgViewMainView.getOnRotate();
 		}
+		
+		//FA
+		if (event.getCode() == KeyCode.DOWN) {
+			imgViewMainView.setFocusTraversable(true);
+			
+			if (countUp == 0) {
+				reset(imgViewMainView, width, height);
+			} 
+			
+			double delta = 40.0;
+			double x = 107.0;
+			double y = 181.0;
+			Rectangle2D viewport = imgViewMainView.getViewport();
+
+			double scale = clamp(Math.pow(1.01, delta),
+
+			Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+
+			// don't scale so that we're bigger than image dimensions:
+					Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+
+			);
+			
+			Point2D mouse = imageViewToImage(imgViewMainView, new Point2D(x, y));
+
+			double newWidth = viewport.getWidth() * scale;
+			double newHeight = viewport.getHeight() * scale;
+
+			double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 0, width - newWidth);
+			double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 0, height - newHeight);
+
+			imgViewMainView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+
+//			Rectangle2D viewportRect = new Rectangle2D(40, 35, 110, 110);
+//			imgViewMainView.setViewport(viewportRect);
+		}
+		
+		//FA
+		if (event.getCode() == KeyCode.UP) {
+			imgViewMainView.setFocusTraversable(true);
+			
+			if (countUp == 0) {
+				reset(imgViewMainView, width, height);
+			}
+			
+			double delta = -40.0;
+			double x = 107.0;
+			double y = 181.0;
+			Rectangle2D viewport = imgViewMainView.getViewport();
+
+			double scale = clamp(Math.pow(1.01, delta),
+
+			Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+
+			// don't scale so that we're bigger than image dimensions:
+					Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+
+			);
+
+			Point2D mouse = imageViewToImage(imgViewMainView, new Point2D(x, y));
+
+			double newWidth = viewport.getWidth() * scale;
+			double newHeight = viewport.getHeight() * scale;
+
+			double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 0, width - newWidth);
+			double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 0, height - newHeight);
+
+			imgViewMainView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+			countUp++;
+		}
 		setTextAsuransi();
 		setTotalBiaya();
 	}
@@ -487,6 +559,7 @@ public class DataEntryBrowseController implements Initializable {
 
 	@FXML
 	public void onClickCancel() {
+		countUp = 0;
 		Stage stage = (Stage) btn_batal.getScene().getWindow();
 		stage.close();
 	}

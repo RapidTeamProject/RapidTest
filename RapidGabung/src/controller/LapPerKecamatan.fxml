@@ -39,9 +39,10 @@
 						<TableColumn fx:id="noCol" prefWidth="53.0" text="NO" />
 						<TableColumn fx:id="awbCol" prefWidth="186.0" text="AWB" />
 	                  	<TableColumn fx:id="tglCol" editable="true" prefWidth="121.0" text="TANGGAL" />
-						<TableColumn fx:id="penerimaCol" prefWidth="140.0" text="PENERIMA" />
+						<!-- <TableColumn fx:id="penerimaCol" prefWidth="140.0" text="PENERIMA" /> -->
 						<TableColumn fx:id="tujuanCol" prefWidth="140.0" text="TUJUAN" />
 						<TableColumn fx:id="perwakilanCol" minWidth="5.0" prefWidth="140.0" text="PERWAKILAN" />
+						<TableColumn fx:id="zonaCol" minWidth="5.0" prefWidth="140.0" text="ZONA" />
 						<TableColumn fx:id="kecamatanCol" prefWidth="121.0" text="KECAMATAN" />
 						<TableColumn fx:id="kabupatenCol" prefWidth="165.0" text="KABUPATEN" />
 						<TableColumn fx:id="propinsiCol" prefWidth="160.0" text="PROPINSI" />

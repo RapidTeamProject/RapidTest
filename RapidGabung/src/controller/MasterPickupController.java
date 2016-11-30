@@ -3,25 +3,27 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Map;
+
 import java.util.ResourceBundle;
-import java.util.Set;
 
-import com.sun.prism.impl.Disposer.Record;
 
-import VO.BrowseSemuaDataVO;
-import controller.AwbHistoryController.KurirTV;
-import controller.LapPerKecamatanController.LapPerKecamatanTV;
-import entity.TrCabang;
+
+
+
+
+
+
 import entity.TrPelanggan;
+import entity.TrPerwakilan;
 import entity.TrPickup;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,12 +47,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import net.sf.jasperreports.engine.util.MessageUtil;
+
 import service.GenericService;
-import service.MasterCabangService;
+import service.MasterPerwakilanService;
 import service.MasterPickupService;
 import service.PelangganService;
-import util.DateUtil;
+
 import util.DtoListener;
 import util.ManagedFormHelper;
 import util.MessageBox;

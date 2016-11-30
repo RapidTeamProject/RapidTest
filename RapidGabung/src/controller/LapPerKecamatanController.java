@@ -1,5 +1,4 @@
 package controller;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -8,28 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import VO.EntryDataShowVO;
-import VO.LaporanPenerimaVO;
-import controller.MasterPelangganController.DiskonTV;
-import entity.TrCabang;
-import entity.TrKurir;
 import entity.TrPerwakilan;
-import entity.TtDataEntry;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
@@ -37,11 +25,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import service.LaporanPenerimaService;
 import service.LaporanPerKecamatanService;
-import service.MasterCabangService;
 import service.MasterPerwakilanService;
 import util.DateUtil;
 import util.DtoListener;
@@ -49,7 +34,6 @@ import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.WindowsHelper;
-import utilfx.AutoCompleteComboBoxListener;
 
 public class LapPerKecamatanController implements Initializable {
 	
@@ -68,14 +52,16 @@ public class LapPerKecamatanController implements Initializable {
 	@FXML
 	private TextField txtCari;
 	
+	//FA
 	@FXML
 	private TableColumn<LapPerKecamatanTV, String> 
 		noCol,
 		awbCol,
 		tglCol,
-		penerimaCol,
+//		penerimaCol,
 		tujuanCol,
 		perwakilanCol,
+		zonaCol,
 		kecamatanCol,
 		kabupatenCol,
 		propinsiCol,
@@ -104,13 +90,15 @@ public class LapPerKecamatanController implements Initializable {
 		cmbKodePerwakilan.setValue("All Cabang");
 	}
 	
+	//FA
 	public class LapPerKecamatanTV{
 		private StringProperty no;
 		private StringProperty awb;
 		private StringProperty tglCreate;
-		private StringProperty penerima;
+//		private StringProperty penerima;
 		private StringProperty tujuan;
 		private StringProperty kodePerwakilan;
+		private StringProperty zona;
 		private StringProperty kecamatan;
 		private StringProperty kabupaten;
 		private StringProperty propinsi;
@@ -121,9 +109,10 @@ public class LapPerKecamatanController implements Initializable {
 				String no, 
 				String awb, 
 				String tglCreate, 
-				String penerima, 
+//				String penerima, 
 				String tujuan, 
 				String kodePerwakilan, 
+				String zona,
 				String kecamatan,
 				String kabupaten,
 				String propinsi,
@@ -133,9 +122,10 @@ public class LapPerKecamatanController implements Initializable {
 			this.no = new SimpleStringProperty(no);
 			this.awb = new SimpleStringProperty(awb);
 			this.tglCreate = new SimpleStringProperty(tglCreate);
-			this.penerima = new SimpleStringProperty(penerima);
+//			this.penerima = new SimpleStringProperty(penerima);
 			this.tujuan = new SimpleStringProperty(tujuan);
 			this.kodePerwakilan = new SimpleStringProperty(kodePerwakilan);
+			this.zona = new SimpleStringProperty(zona);
 			this.kecamatan = new SimpleStringProperty(kecamatan);
 			this.kabupaten = new SimpleStringProperty(kabupaten);
 			this.propinsi = new SimpleStringProperty(propinsi);
@@ -167,13 +157,13 @@ public class LapPerKecamatanController implements Initializable {
 			this.tglCreate.set(tglCreate);
 		}
 
-		public String getPenerima() {
-			return penerima.get();
-		}
-
-		public void setPenerima(String penerima) {
-			this.penerima.set(penerima);
-		}
+//		public String getPenerima() {
+//			return penerima.get();
+//		}
+//
+//		public void setPenerima(String penerima) {
+//			this.penerima.set(penerima);
+//		}
 
 		public String getTujuan() {
 			return tujuan.get();
@@ -189,6 +179,16 @@ public class LapPerKecamatanController implements Initializable {
 
 		public void setKodePerwakilan(String kodePerwakilan) {
 			this.kodePerwakilan.set(kodePerwakilan);
+		}
+		
+		//FA
+		public String getZona() {
+			return zona.get();
+		}
+
+		//FA
+		public void setZona(String zona) {
+			this.zona.set(zona);
 		}
 
 		public String getKecamatan() {
@@ -243,9 +243,9 @@ public class LapPerKecamatanController implements Initializable {
 			return tglCreate;
 		}
 		
-		public StringProperty getPenerimaProperty(){
-			return penerima;
-		}
+//		public StringProperty getPenerimaProperty(){
+//			return penerima;
+//		}
 		
 		public StringProperty getTujuanProperty(){
 			return tujuan;
@@ -253,6 +253,11 @@ public class LapPerKecamatanController implements Initializable {
 		
 		public StringProperty getKodePerwakilanProperty(){
 			return kodePerwakilan;
+		}
+		
+		//FA
+		public StringProperty getZonaProperty(){
+			return zona;
 		}
 		
 		public StringProperty getKecamatanProperty(){
@@ -276,6 +281,7 @@ public class LapPerKecamatanController implements Initializable {
 		}
 	}
 	
+	//FA
 	public void SetTable(){
 		List<Map> result = LaporanPerKecamatanService.getLaporanByParam(DateUtil.convertToDatabaseColumn(dpAwal.getValue()), DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), (String) cmbKodePerwakilan.getSelectionModel().getSelectedItem().toString());
 		Integer no = 0;
@@ -285,9 +291,10 @@ public class LapPerKecamatanController implements Initializable {
 					no.toString(),
 					(String) obj.get("AWB_DATA_ENTRY"),
 					DateUtil.getStdDateDisplay((Date) obj.get("TGL_CREATE")),
-					(String) obj.get("PENERIMA"),
+//					(String) obj.get("PENERIMA"),
 					(String) obj.get("TUJUAN"),
 					(String) obj.get("KODE_PERWAKILAN"),
+					(String) obj.get("KODE_ZONA"),
 					(String) obj.get("KECAMATAN"),
 					new String((String) obj.get("KABUPATEN")).toUpperCase(),
 					(String) obj.get("PROPINSI"),
@@ -299,9 +306,10 @@ public class LapPerKecamatanController implements Initializable {
 		noCol.setCellValueFactory(cellData -> cellData.getValue().getNoProperty());
 		awbCol.setCellValueFactory(cellData -> cellData.getValue().getAwbProperty());
 		tglCol.setCellValueFactory(cellData -> cellData.getValue().getTglCreateProperty());
-		penerimaCol.setCellValueFactory(cellData -> cellData.getValue().getPenerimaProperty());
+//		penerimaCol.setCellValueFactory(cellData -> cellData.getValue().getPenerimaProperty());
 		tujuanCol.setCellValueFactory(cellData -> cellData.getValue().getTujuanProperty());
 		perwakilanCol.setCellValueFactory(cellData -> cellData.getValue().getKodePerwakilanProperty());
+		zonaCol.setCellValueFactory(cellData -> cellData.getValue().getZonaProperty());
 		kecamatanCol.setCellValueFactory(cellData -> cellData.getValue().getKecamatanProperty());
 		kabupatenCol.setCellValueFactory(cellData -> cellData.getValue().getKabupatenProperty());
 		propinsiCol.setCellValueFactory(cellData -> cellData.getValue().getPropinsiProperty());
@@ -321,11 +329,13 @@ public class LapPerKecamatanController implements Initializable {
 					return true;
 				}else if(data.getTglCreate().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
-				}else if(data.getPenerima().toLowerCase().indexOf(lowerCaseFilter) != -1){
-					return true;
+//				}else if(data.getPenerima().toLowerCase().indexOf(lowerCaseFilter) != -1){
+//					return true;
 				}else if(data.getTujuan().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
 				}else if(data.getKodePerwakilan().toLowerCase().indexOf(lowerCaseFilter) != -1){
+					return true;
+				}else if (data.getZona().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;
 				}else if(data.getKecamatan().toLowerCase().indexOf(lowerCaseFilter) != -1){
 					return true;

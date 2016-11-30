@@ -463,14 +463,18 @@ public class ExportToExcell {
 			HSSFCell cellTgl= row1.createCell((short) 2);
 			cellTgl.setCellValue("TANGGAL");
 			
-			HSSFCell cellPenerima= row1.createCell((short) 3);
-			cellPenerima.setCellValue("PENERIMA");
+//			HSSFCell cellPenerima= row1.createCell((short) 3);
+//			cellPenerima.setCellValue("PENERIMA");
 			
-			HSSFCell cellTujuan= row1.createCell((short) 4);
+			HSSFCell cellTujuan= row1.createCell((short) 3);
 			cellTujuan.setCellValue("TUJUAN");
 			
-			HSSFCell cellPerwakilan= row1.createCell((short) 5);
+			HSSFCell cellPerwakilan= row1.createCell((short) 4);
 			cellPerwakilan.setCellValue("PERWAKILAN");
+			
+			//FA
+			HSSFCell cellZona= row1.createCell((short) 5);
+			cellZona.setCellValue("ZONA");
 			
 			HSSFCell cellKecamatan= row1.createCell((short) 6);
 			cellKecamatan.setCellValue("KECAMATAN");
@@ -508,14 +512,18 @@ public class ExportToExcell {
 				cellB1.setCellValue(data.getTglCreate());
 				cellB1.setCellStyle(cellStyle);
 				
+//				HSSFCell cellC1 = row1.createCell((short) 3);
+//				cellC1.setCellValue(data.getPenerima());
+				
 				HSSFCell cellC1 = row1.createCell((short) 3);
-				cellC1.setCellValue(data.getPenerima());
+				cellC1.setCellValue(data.getTujuan());
 				
 				HSSFCell cellD1 = row1.createCell((short) 4);
-				cellD1.setCellValue(data.getTujuan());
+				cellD1.setCellValue(data.getKodePerwakilan());
 				
+				//FA
 				HSSFCell cellE1 = row1.createCell((short) 5);
-				cellE1.setCellValue(data.getKodePerwakilan());
+				cellE1.setCellValue(data.getZona());
 				
 				HSSFCell cellF1 = row1.createCell((short) 6);
 				cellF1.setCellValue(data.getKecamatan());
