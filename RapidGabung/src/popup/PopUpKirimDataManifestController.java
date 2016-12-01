@@ -129,8 +129,8 @@ public class PopUpKirimDataManifestController<T> implements Initializable {
                     		
                     		String toEmail = tv.getEmail();
                     		EmailUtil.kirimManifestWithEmail(
-            						"ferdhi.adrian10@gmail.com", 
-            						"cipamokolan", 
+            						username, 
+            						password, 
             						toEmail, 
             						"Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.getNow()) + ".xls", 
             						"C:/DLL/REPORT/EXPORTEXCEL/" + "Data Manifest Master Cabang" + "-" + tv.getKodePerwakilan() + "-" + DateUtil.dateToStdDateLiteral(DateUtil.getNow()) + ".xls");
