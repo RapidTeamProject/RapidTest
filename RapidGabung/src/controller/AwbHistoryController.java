@@ -52,7 +52,6 @@ import util.ManagedFormHelper;
 import util.WindowsHelper;
 
 public class AwbHistoryController implements Initializable {
-	// nama saya christian, ini saya coba test commit ke GIT melalui akun puryanto
 	@FXML
 	TableView lstView;
 	@FXML
