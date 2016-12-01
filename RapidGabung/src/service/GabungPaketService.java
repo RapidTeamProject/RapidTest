@@ -504,7 +504,7 @@ public class GabungPaketService {
 		String FinalAutuNo;
 		Session s = HibernateUtil.openSession();
 		String sql = "select max(substr(id_kardus, 4, 3)) from tt_gabung_paket "
-				+ "where KODE_PERWAKILAN=:pKdPerwakilan " + "and substr(tgl_create, 1, 10) = '"+DateUtil.getDateRipTimeForSQL(fotoTimbangDateGenerateRule)+"'";
+				+ "where KODE_PERWAKILAN=:pKdPerwakilan " + "and date(tgl_create) = '"+DateUtil.getDateRipTimeForSQL(fotoTimbangDateGenerateRule)+"'";
 		Query query = s.createSQLQuery(sql).setParameter("pKdPerwakilan", kdPerwakilan);
 		String MaxCode = (String) query.uniqueResult();
 		System.out.println("--> maxCode : " + MaxCode);
