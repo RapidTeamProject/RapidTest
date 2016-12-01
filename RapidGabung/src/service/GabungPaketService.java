@@ -498,5 +498,33 @@ public class GabungPaketService {
 		
 		return returnList;
 	}
+	public static String getMaxCode2(String kdPerwakilan, Date fotoTimbangDateGenerateRule) {
+		System.out.println("--> run service : getMaxCode");
+		System.out.println("--> kdPerwakilan : " + kdPerwakilan);
+		String FinalAutuNo;
+		Session s = HibernateUtil.openSession();
+		String sql = "select max(substr(id_kardus, 4, 3)) from tt_gabung_paket "
+				+ "where KODE_PERWAKILAN=:pKdPerwakilan " + "and substr(tgl_create, 1, 10) = '"+DateUtil.getDateRipTimeForSQL(fotoTimbangDateGenerateRule)+"'";
+		Query query = s.createSQLQuery(sql).setParameter("pKdPerwakilan", kdPerwakilan);
+		String MaxCode = (String) query.uniqueResult();
+		System.out.println("--> maxCode : " + MaxCode);
+		int AutoNo = MaxCode != null ? Integer.parseInt(MaxCode) : 0;
+		if (AutoNo > 0) {
+			AutoNo = AutoNo + 1;
+			System.out.println("Auto No : "+AutoNo);
+			if (AutoNo <= 9) {
+				FinalAutuNo = "00" + AutoNo;
+			}else if (AutoNo > 9 && AutoNo <= 99 ) {
+				FinalAutuNo = "0" + AutoNo;
+			} else {
+				FinalAutuNo = String.valueOf(AutoNo);
+			}
+		} else {
+			FinalAutuNo = "001";
+		}
+		s.getTransaction().commit();
+		System.out.println("--> FinalAutoNo : " + FinalAutuNo);
+		return FinalAutuNo;
+	}
 }
 
