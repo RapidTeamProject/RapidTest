@@ -52,17 +52,7 @@ import util.ManagedFormHelper;
 import util.WindowsHelper;
 
 public class AwbHistoryController implements Initializable {
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	// commit dari christian
-	
+	// coba test dari mas pur
 	@FXML
 	TableView lstView;
 	@FXML
