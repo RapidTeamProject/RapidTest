@@ -52,6 +52,7 @@ import util.ManagedFormHelper;
 import util.WindowsHelper;
 
 public class AwbHistoryController implements Initializable {
+	// akun pur
 	@FXML
 	TableView lstView;
 	@FXML
