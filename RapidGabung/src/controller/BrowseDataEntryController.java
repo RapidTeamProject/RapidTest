@@ -67,7 +67,6 @@ public class BrowseDataEntryController implements Initializable {
 		ManagedFormHelper.instanceController = this;
 		txt_jml_records.setEditable(false);
 		settingListboksDataEntry();
-
 	}
 
 	public void settingListboksDataEntry() {
@@ -171,10 +170,11 @@ public class BrowseDataEntryController implements Initializable {
 			cellButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent t) {
+					System.out.println("Tahap 1");
 					int selectdIndex = getTableRow().getIndex();
 					TtDataEntry a = (TtDataEntry) tblView.getItems().get(selectdIndex);
 					try {
-
+						System.out.println("Tahap 2");
 						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/DataEntry.fxml"));
 						Stage dialogStage = new Stage();
 						dialogStage.setTitle("Entry Data");

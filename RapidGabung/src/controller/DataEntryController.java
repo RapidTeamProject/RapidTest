@@ -395,6 +395,8 @@ public class DataEntryController implements Initializable {
 	public void loopData() {
 		no = 0;
 		if (noLoop > listEntryAll.size()) {
+			System.out.println("--> noLoop : " + noLoop);
+			System.out.println();
 			kembali();
 		} else {
 			for (EntryDataShowVO dat : listEntryAll) {

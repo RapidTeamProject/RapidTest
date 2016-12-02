@@ -190,14 +190,15 @@ public class DataPaketService {
 				+ " where b.pengirim =:prPengirim"
 				+ " and a.awb_header = b.awb_data_entry "
 				+ " and a.awb_header = c.awb_poto_timbang "
-				+ " and b.Flag_entry=0 and substr(b.tgl_create, 1, 10) = "
-				+ " (select case when DATE_FORMAT(now(),'%H:%i:%s') >  '00:00:00'  "
-				+ " and DATE_FORMAT(now(),'%H:%i:%s') <=  '11:00:00' "
-				+ " then date_add(curdate(), interval -1 day) else curdate() end as time_zone from dual) "
+				+ " and b.Flag_entry=0 "
+//				+ " and substr(b.tgl_create, 1, 10) = "
+//				+ " (select case when DATE_FORMAT(now(),'%H:%i:%s') >  '00:00:00'  "
+//				+ " and DATE_FORMAT(now(),'%H:%i:%s') <=  '11:00:00' "
+//				+ " then date_add(curdate(), interval -1 day) else curdate() end as time_zone from dual) "
 				+ " and a.flag=0 LIMIT 5";
 		
 		Query query = s.createSQLQuery(sql).setParameter("prPengirim", pengirim);
-		
+		System.out.println("--> sql : " + sql);
 		List<EntryDataShowVO> returnList = new ArrayList<EntryDataShowVO>();	
 		 List<Object[]> list=query.list();
 		    for (Object[] objects : list) {
