@@ -62,7 +62,7 @@ import utilfx.AutoCompleteComboBoxListener;
 public class MasterPickupController implements Initializable {
 
 	@FXML
-	ComboBox cmbHari;
+	ComboBox cmbHari, cmbPerwakilan;
 	@FXML
 	Button btnSimpan;
 	@FXML
@@ -128,10 +128,23 @@ public class MasterPickupController implements Initializable {
 				}
 			}
 		});
+		
+		cmbPerwakilan.getItems().add("All Perwakilan");
+		List<TrPerwakilan> lstPerwakilan = MasterPerwakilanService.getAllPerwakilanCabangDistinct();
+		for (TrPerwakilan trPerwakilan : lstPerwakilan) {
+			cmbPerwakilan.getItems().add(trPerwakilan.getKodePerwakilan());
+		}
+		cmbPerwakilan.setValue("All Perwakilan");
+		
+		cmbPerwakilan.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override public void changed(ObservableValue ov, String t, String t1) {
+		    	refreshTable();
+		    }
+		});
 		refreshTable();
 	}
 	public void refreshTable(){
-		List<TrPelanggan> pelanggan = PelangganService.getDataPelanggan();
+		List<TrPelanggan> pelanggan = PelangganService.getDataPelanggan((String) cmbPerwakilan.getSelectionModel().getSelectedItem().toString());
 
 //		listboxMasterPickup.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		

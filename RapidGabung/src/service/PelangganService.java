@@ -138,6 +138,92 @@ public class PelangganService {
 		return lsPelanggan;
 	}
 
+	public static List<TrPelanggan> getDataPelanggan(String kodePerwakilan) {
+		Session session = HibernateUtil.openSession();
+		String nativeSql = "select a.kode_pelanggan, a.nama_akun, a.nama_pemilik, a.email"
+				+ ", a.telp , a.alamat, a.line, a.instagram, a.keterangan, a.tgl_mulai_diskon" + ", a.diskon_rapid"
+				+ ", a.diskon_jne, a.sms, a.referensi, a.nama_sales, a.tgl_gabung ,a.tgl_create" + ", a.tgl_update, a.tgl_gabung "
+				+ ", a.jabatan1, a.jabatan2 "
+				+ " from tr_pelanggan a "
+				+ " where a.flag=0 ";
+		if(!kodePerwakilan.equals("All Perwakilan")){
+			nativeSql+="and a.asal_pelanggan = '"+kodePerwakilan+"'";
+		}
+		SQLQuery query = session.createSQLQuery(nativeSql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		List result = query.list();
+		System.out.println(result);
+//		session.close();
+		session.getTransaction().commit();
+
+		List<TrPelanggan> returnList = new ArrayList<TrPelanggan>();
+		for (Object obj : result) {
+			Map row = (Map) obj;
+			TrPelanggan everyRow = new TrPelanggan();
+
+			// get data kode pelanggan
+			everyRow.setKodePelanggan(
+					(String) row.get("KODE_PELANGGAN"));
+//			System.out.println(row.get("kode_pelanggan"));
+			// everyRow.setAwbData((String)
+			// row.get("kode_pelanggan")!=null?(String)
+			// row.get("kode_pelanggan"):"");
+
+			// get data nama akun
+			everyRow.setNamaAkun((String) row.get("NAMA_AKUN"));
+
+			// get data nama pemilik
+			everyRow.setNamaPemilik((String) row.get("NAMA_PEMILIK"));
+
+			// get data email pelanggan
+			everyRow.setEmail((String) row.get("EMAIL"));
+
+			// get data telp
+			everyRow.setTelp((String) row.get("TELP"));
+
+			// get data Alamat
+			everyRow.setAlamat((String) row.get("ALAMAT"));
+
+			// get data line
+			everyRow.setLine((String) row.get("LINE"));
+
+			// get data instagram
+			everyRow.setInstagram((String) row.get("INSTAGRAM"));
+			
+			// get data instagram
+			everyRow.setKeterangan((String) row.get("KETERANGAN"));
+
+			 //get data telp
+			 everyRow.setDiskonRapid((Integer) row.get("DISKON_RAPID"));
+			
+			 //get data diskon jne
+			 everyRow.setDiskonJne((Integer) row.get("DISKON_JNE"));
+			 
+			//get data TglMulaiDiskon
+			 everyRow.setTglMulaiDiskon((Date) row.get("TGL_MULAI_DISKON"));
+						 
+			// //get data sms
+			// everyRow.setSms((String) row.get("SMS"));
+
+			// get data nama sales
+			everyRow.setNamaSales((String) row.get("NAMA_SALES"));
+			
+			// get data instagram
+		    everyRow.setReferensi((String) row.get("REFERENSI"));
+
+			 //get tanggal bergabung
+			 everyRow.setTglGabung((Date) row.get("TGL_GABUNG"));
+
+			 everyRow.setJabatan1((String) row.get("JABATAN1"));
+			 
+			 everyRow.setJabatan2((String) row.get("JABATAN2"));
+			 
+			returnList.add(everyRow);
+		}
+		return returnList;
+
+	}
+	
 	public static List<TrPelanggan> getDataPelanggan() {
 		Session session = HibernateUtil.openSession();
 		String nativeSql = "select a.kode_pelanggan, a.nama_akun, a.nama_pemilik, a.email"
@@ -219,7 +305,7 @@ public class PelangganService {
 		}
 		return returnList;
 
-	}
+	}	
 	
 	public static Boolean showTableSetelahDelete(String Nik) {
 		Session sess = HibernateUtil.openSession();
