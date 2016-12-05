@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.sun.prism.impl.Disposer.Record;
+
 import entity.TrKurir;
 import entity.TrPelanggan;
 import entity.TrPickup;
@@ -23,6 +25,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -195,11 +198,13 @@ public class JadwalPickupController implements Initializable {
 		cmbAnchorPaneGridPane1.setLayoutY(7.0);
 		cmbAnchorPaneGridPane1.setPrefHeight(25.0);
 		cmbAnchorPaneGridPane1.setPrefWidth(266.0);
-		List<TrKurir> lstKurir = JadwalPickupService.getKurirLokal();
+		List<TrKurir> lstKurir = JadwalPickupService.getKurirLokalAsc();
 		for (TrKurir kur : lstKurir) {
 			cmbAnchorPaneGridPane1.getItems().add(kur.getNama());
 		}
 		cmbAnchorPaneGridPane1.setValue(kurir.getNama());
+		new AutoCompleteComboBoxListener<TrKurir>(cmbAnchorPaneGridPane1);
+		
 		anchorPaneGridpane1.getChildren().addAll(hiddenIndex, hiddenRow, lbAnchorPaneGridPane1, cmbAnchorPaneGridPane1);
 		
 		AnchorPane anchorPaneGridpane2 = new AnchorPane();
@@ -416,40 +421,7 @@ public class JadwalPickupController implements Initializable {
 		                        return cell;
 		                    }
 		                };
-//        		                
-//        berangkatCol.setCellValueFactory(new PropertyValueFactory<JadwalTV, Boolean>("jalan"));
-//        berangkatCol.setCellFactory(CheckBoxTableCell.forTableColumn(berangkatCol));
-        // ====
-        
-//        berangkatCol.setCellFactory(
-//                new Callback<TableColumn<JadwalTV, Boolean>, TableCell<JadwalTV, Boolean>>() {
-//                    @Override
-//                    public TableCell<JadwalTV, Boolean> call(TableColumn<JadwalTV, Boolean> param) {
-//                        return new CheckBoxTableCell<JadwalTV, Boolean>(){
-//                            {
-//                                setAlignment(Pos.CENTER);
-//                            }
-//
-//                            @Override
-//                            public void updateItem(Boolean item, boolean empty){
-//                                if(!empty){
-////                                    TableRow row = getTableRow();
-//                                	JadwalTV row = getTableView().getItems().get( getIndex() );
-//                                	System.out.println("--> item : " + item);
-//                                	System.out.println("--> row : " + row.getJalan());
-//                                    if(row != null){
-//                                    	JadwalPickupService.updateJadwalPickup(1, 1, row.getId() );										
-//////                        			buildTableViewPickup(tv, cmb);
-//                                    }
-//                                }
-//                                super.updateItem(item, empty);
-//                            }
-//                        };
-//                    }
-//                }
-//        );
-//        
-//        // ====
+
 //        berangkatCol.setEditable(true);
         sendCol.setCellFactory( cellFactorySend );	
         jalanCol.setCellFactory( cellFactoryJalan );
@@ -537,13 +509,54 @@ public class JadwalPickupController implements Initializable {
 		TableColumn<JadwalTV, String> pelangganCol = new TableColumn<JadwalTV, String>("Pelanggan");
 		TableColumn<JadwalTV, String> jamCol = new TableColumn<JadwalTV, String>("Jam");
 		TableColumn<JadwalTV, String> ownerCol = new TableColumn<JadwalTV, String>("Ownner");
+		TableColumn<JadwalTV, String> actionCol = new TableColumn<JadwalTV, String>("");
 			
-		tbvJadwalPickup.getColumns().addAll(pelangganCol, jamCol, ownerCol);
+		tbvJadwalPickup.getColumns().addAll(pelangganCol, jamCol, ownerCol, actionCol);
 			
 		pelangganCol.setCellValueFactory(new PropertyValueFactory<JadwalTV, String>("pelanggan"));
 		jamCol.setCellValueFactory(new PropertyValueFactory<JadwalTV, String>("jam"));
 		ownerCol.setCellValueFactory(new PropertyValueFactory<JadwalTV, String>("source"));
-			
+		
+		Callback<TableColumn<JadwalTV, String>, TableCell<JadwalTV, String>> cellFactoryDelete = //
+                new Callback<TableColumn<JadwalTV, String>, TableCell<JadwalTV, String>>()
+                {
+                    @Override
+                    public TableCell call( final TableColumn<JadwalTV, String> param ){
+                        final TableCell<JadwalTV, String> cell = new TableCell<JadwalTV, String>(){
+
+                            final Button btnDelete = new Button( "Delete" );
+
+                            @Override
+                            public void updateItem( String item, boolean empty ){
+                                super.updateItem( item, empty );
+                                if ( empty ){setGraphic( null );setText( null );
+                                
+                                }else{
+                                	JadwalTV row = getTableView().getItems().get( getIndex() );
+                                	btnDelete.setOnAction( ( ActionEvent event ) -> {
+	                                		int[] dataButtonMessageBox = new int[2];
+	                						dataButtonMessageBox[0] = MessageBox.BUTTON_OK;
+	                						dataButtonMessageBox[1] = MessageBox.BUTTON_CANCEL;
+	                						int hasilMessageBox = MessageBox.confirm("Apakah Yakin akan Melakukan Delete?",
+	                								dataButtonMessageBox);
+                						if (hasilMessageBox == 6) { // cancel
+                							JadwalPickupService.deleteJadwalPickupLangsung(row.getIdPickup());
+                							loadMasterPickup();
+                						}
+	                                });  
+                                	String source = row.getSource();
+                                	if(source.equals("MANUAL")){
+                                		setGraphic( btnDelete );
+                                        setText( null );
+                                	}                                    
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+		
+        actionCol.setCellFactory( cellFactoryDelete );
 		tbvJadwalPickup.setEditable(true);
 		
 		// list sesudah
@@ -735,10 +748,11 @@ public class JadwalPickupController implements Initializable {
 		cmbAnchorPaneGridPane1.setLayoutY(7.0);
 		cmbAnchorPaneGridPane1.setPrefHeight(25.0);
 		cmbAnchorPaneGridPane1.setPrefWidth(266.0);
-		List<TrKurir> lstKurir = JadwalPickupService.getKurirLokal();
+		List<TrKurir> lstKurir = JadwalPickupService.getKurirLokalAsc();
 		for (TrKurir kur : lstKurir) {
 			cmbAnchorPaneGridPane1.getItems().add(kur.getNama());
 		}
+		new AutoCompleteComboBoxListener<TrKurir>(cmbAnchorPaneGridPane1);
 		anchorPaneGridpane1.getChildren().addAll(hiddenIndex, hiddenRow, lbAnchorPaneGridPane1, cmbAnchorPaneGridPane1);
 		
 		AnchorPane anchorPaneGridpane2 = new AnchorPane();
@@ -767,16 +781,6 @@ public class JadwalPickupController implements Initializable {
 		anchorPaneGridpane3.setPrefHeight(200.0);
 		anchorPaneGridpane3.setPrefWidth(200.0);
 		gridPane.setRowIndex(anchorPaneGridpane3, 2);
-//		Button btnPickup = new Button("Pickup Manual");
-//		btnPickup.setLayoutX(189.0);
-//		btnPickup.setLayoutY(17.0);
-//		btnPickup.setMnemonicParsing(false);	
-//		btnPickup.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent event) {
-//				callDialog(tvAnchorPaneGridPane2, cmbAnchorPaneGridPane1, index);				
-//			}			
-//		});
 		
 		Button btnPickup2 = new Button("Pickup Jadwal");
 		btnPickup2.setLayoutX(289.0);
@@ -852,7 +856,7 @@ public class JadwalPickupController implements Initializable {
 				public void handle(ActionEvent event) {
 					TrPelanggan trPelanggan = PelangganService.getPelangganByName( (String) cmbPelanggan.getValue());
 					if(trPelanggan!=null){
-						String lastMaxId = GenericService.getMaxTableStringRaw(TtPickup.class, "id");
+						String lastMaxId = JadwalPickupService.getTTPickupMaxID();
 						System.out.println("--> lastMaxId : " + lastMaxId);
 						Integer intNum = 0;
 						String newid = "";
@@ -871,21 +875,6 @@ public class JadwalPickupController implements Initializable {
 								new Date(),
 								"0"								
 								);
-//						JadwalPickupService.insertJadwalPickupLangsung(
-//								ids, 
-//								0, 
-//								DateUtil.getNomorHariDalamSeminggu(
-//										DateUtil.convertToDateColumn(dtpickup.getValue()
-//												)
-//									), 
-//								trPelanggan.getKodePelanggan(), 
-//								txtDialogJam.getText()+":"+txtDialogMin.getText(), 
-//								(String) cmb.getSelectionModel().getSelectedItem(), 
-//								index, 
-//								DateUtil.convertToDateColumn(dtpickup.getValue()
-//								)
-//							);
-//						buildTableViewPickup(tv, cmb);
 						loadMasterPickup();
 						stg.close();
 		        	}else{

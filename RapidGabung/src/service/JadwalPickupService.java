@@ -13,6 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -46,6 +47,24 @@ public class JadwalPickupService {
 		c.add(Restrictions.eq("kodePerwakilan", kodePerwakilan));
 		c.add(Restrictions.eq("flag", 0));
 		c.add(Restrictions.eq("idJabatan", "kurir"));
+		List<TrKurir> data = c.list();
+		s.getTransaction().commit();
+		
+		return data;
+	}
+	
+	public static List<TrKurir> getKurirLokalAsc(){
+		String kodePerwakilan = PropertiesUtil.getPerwakilan();
+		
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TrKurir.class);
+		c.add(Restrictions.eq("kodePerwakilan", kodePerwakilan));
+		c.add(Restrictions.eq("flag", 0));
+//		c.add(Restrictions.disjunction()
+//        .add(Restrictions.eq("idJabatan", "Pickup")))
+//        .add(Restrictions.eq("idJabatan", "Delivery"));  
+		c.add(Restrictions.in("idJabatan", new String[] {"Pickup", "Delivery"}));
+		c.addOrder(Order.asc("nama"));
 		List<TrKurir> data = c.list();
 		s.getTransaction().commit();
 		
@@ -162,6 +181,20 @@ public class JadwalPickupService {
 		s.getTransaction().commit();
 	}
 
+	public static void deleteJadwalPickupLangsung(String id) {
+		Session s = HibernateUtil.openSession();
+		Criteria c = s.createCriteria(TtPickup.class);
+		c.add(Restrictions.eq("id", id));
+		List<TtPickup> data = c.list();
+		TtPickup tt = data.get(0);
+		
+		s.delete(tt);
+		s = HibernateUtil.openSession();
+		s.delete(tt);
+		s.flush();
+		s.getTransaction().commit();
+	}	
+	
 	public static List<TtJadwalPickup> getJadwalPickupByKurirByNikKurir(String nik, Date dtCurrent) {
 		Calendar calStart=Calendar.getInstance();
 		Calendar calEnd=Calendar.getInstance();
@@ -325,5 +358,19 @@ public class JadwalPickupService {
 			returnList.add(row);
 		}
 		return returnList;
-	}	
+	}
+
+	public static String getTTPickupMaxID() {
+		Session session = HibernateUtil.openSession();
+		String sql = 
+				"SELECT ID " +
+				"FROM  tt_pickup " +
+				"ORDER BY LENGTH(ID) DESC, ID DESC " +
+				"LIMIT 1";
+		SQLQuery query = session.createSQLQuery(sql);
+		query.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+		Map result = (Map) query.uniqueResult();
+		System.out.println("--> result : " + result);
+		return (String) result.get("Id");
+	}
 }
