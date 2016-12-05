@@ -138,17 +138,8 @@ public class MasterHargaController implements Initializable {
 					TextField txtOne = new TextField("0");
 					TextField txtPerwakilan = new TextField("");
 					
-//					grid.add(new Label("Harga Reg"), 0, 0);
-//					grid.add(txtReg, 1, 0);
-//					grid.add(new Label("Harga ONE"), 0, 1);
-//					grid.add(txtOne, 1, 1);
 					grid.add(new Label("Perwakilan"), 0, 0);
 					grid.add(txtPerwakilan, 1, 0);
-					
-	
-	//				// Enable/Disable login button depending on whether a username was entered.
-//					Node loginButton = dialog.getDialogPane().lookupButton(okButtonType);
-//					loginButton.setDisable(true);
 	
 					dialog.getDialogPane().setContent(grid);
 	
@@ -165,19 +156,6 @@ public class MasterHargaController implements Initializable {
 							settingListboksMasterHarga();
 							MessageBox.alert(selection.size() + " row, sukses di update");
 						}
-
-//						TrPelanggan trPelanggan = PelangganService.getPelangganByName( (String) cmbPelanggan.getSelectionModel().getSelectedItem().toString());
-//						for (BrowseSemuaDataVO each : selection) {
-//							System.out.println("--> " + each.getAwbData());
-//							System.out.println("--> " + each.getPengirim());
-//							BrowseSemuaDataService.updateResiPengirim(
-//									each.getAwbData(), 
-//									trPelanggan.getKodePelanggan(),
-//									txtNoPickup.getText()
-//							);
-//						}					
-//						refreshTable();
-						
 						return null;
 					});
 	
