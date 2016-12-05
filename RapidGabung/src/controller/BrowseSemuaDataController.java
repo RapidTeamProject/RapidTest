@@ -196,9 +196,8 @@ public class BrowseSemuaDataController implements Initializable {
 					// Request focus on the username field by default.
 					Platform.runLater(() -> cmbPelanggan.requestFocus());
 					
-					Optional<Pair<String, String>> result = dialog.showAndWait();
+//					Optional<Pair<String, String>> result = dialog.showAndWait();
 					dialog.setResultConverter(dialogButton -> {
-						System.out.println("--> dialogButton : " + dialogButton);
 						if (dialogButton == okButtonType) {
 							TrPelanggan trPelanggan = PelangganService.getPelangganByName( (String) cmbPelanggan.getSelectionModel().getSelectedItem().toString());
 							for (BrowseSemuaDataVO each : selection) {
@@ -216,6 +215,12 @@ public class BrowseSemuaDataController implements Initializable {
 						}
 						return null;
 					});
+					
+					Optional<Pair<String, String>> result = dialog.showAndWait();
+					
+					result.ifPresent(usernamePassword -> {
+					    System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
+					});	
 				}
 			}
 		});
