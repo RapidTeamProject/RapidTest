@@ -20,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -51,6 +52,9 @@ public class LapPerKecamatanController implements Initializable {
 	
 	@FXML
 	private TextField txtCari;
+	
+	@FXML
+	private Label lblPaket, lblBerat, lblHarga;
 	
 	//FA
 	@FXML
@@ -285,6 +289,8 @@ public class LapPerKecamatanController implements Initializable {
 	public void SetTable(){
 		List<Map> result = LaporanPerKecamatanService.getLaporanByParam(DateUtil.convertToDatabaseColumn(dpAwal.getValue()), DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), (String) cmbKodePerwakilan.getSelectionModel().getSelectedItem().toString());
 		Integer no = 0;
+		Integer harga = 0;
+		Integer berat = 0;
 		for (Map obj : result) {
 			no++;
 			LapPerKecamatanTV row = new LapPerKecamatanTV(
@@ -300,8 +306,16 @@ public class LapPerKecamatanController implements Initializable {
 					(String) obj.get("PROPINSI"),
 					(String) obj.get("LAYANAN"),
 					new Integer((Integer) obj.get("HARGA")).toString());
+			harga += new Integer((Integer) obj.get("HARGA"));
+//			berat += new Integer((Integer) obj.get("PBCLOSE"));
+			System.out.println("berat ke : " + no + " adalah " + (String) obj.get("PBCLOSE"));
+			berat += Integer.valueOf((String) obj.get("PBCLOSE"));
 			masterData.add(row);
 		}
+		
+		lblPaket.setText(no.toString());
+		lblHarga.setText(harga.toString());
+		lblBerat.setText(berat.toString());
 		
 		noCol.setCellValueFactory(cellData -> cellData.getValue().getNoProperty());
 		awbCol.setCellValueFactory(cellData -> cellData.getValue().getAwbProperty());

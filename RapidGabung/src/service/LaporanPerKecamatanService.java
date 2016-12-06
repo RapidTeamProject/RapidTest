@@ -23,7 +23,7 @@ public class LaporanPerKecamatanService {
 				"	distinct " + 
 		        "        a.awb_data_entry, " +
 		        "        a.tgl_create,  " +
-//		        "        a.penerima,  " +
+		        "        a.pbclose,  " +
 		        "        a.tujuan, " +
 		        "        a.kode_perwakilan, " +
 		        "        b.zona,  " +	
