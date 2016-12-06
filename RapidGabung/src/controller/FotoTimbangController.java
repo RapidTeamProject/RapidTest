@@ -174,9 +174,15 @@ public class FotoTimbangController implements Initializable {
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(!txtAWB.getText().equals("")){
+				if(!txtVolume.getText().equals("")){
+					isOne=false;
+					Image img = null;
+					imgLayanan.setImage(img);
+					lblLayanan.setText("Regular");
+					
+					captureVolume();
 					TtPotoTimbang _pp = PotoTimbangService.getPotoPaketByAWB(txtAWB.getText());
-	
+					
 					BigDecimal bgBerat = new BigDecimal(txtBerat.getText());
 					BigDecimal bgVolume = new BigDecimal(txtVolume.getText());
 	
@@ -216,12 +222,82 @@ public class FotoTimbangController implements Initializable {
 					PotoTimbangService.update(_pp);
 					DataEntryService.update(dPaket);
 				}else{
-					MessageBox.alert("Sebelum melakukan input volume, mohon dilakukan fototimbang terlebih dahulu");
+					MessageBox.alert("Silahkan input volume terlebih dahulu");
 				}
+
 			}
 		});
 		return btn;
 	}	
+	
+	private void captureVolume() {
+		Integer inputKe = (Integer) mapPelanggan.get("input ke");
+		inputKe++;
+		Integer jumBarang = Integer.parseInt((String) mapPelanggan.get("jumlah barang"));
+		if (inputKe > jumBarang) {
+			TempUtil.clearFotoTimbangLocal();
+			int[] dataButtonMessageBox = new int[2];
+			dataButtonMessageBox[0] = MessageBox.BUTTON_OK;
+			dataButtonMessageBox[1] = MessageBox.BUTTON_CANCEL;
+			int hasilMessageBox = MessageBox.confirm("Foto Timbang Selesai, Apakah akan melakukan foto kembali?",
+					dataButtonMessageBox);
+			if (hasilMessageBox == 5) { // cancel
+				TempUtil.clearFotoTimbangLocal();
+//				tampilkanPilihPelanggan();
+//				backDtoListener();				
+				MenuController controller = new MenuController();
+			    controller.onFotoTimbang();
+			} else if (hasilMessageBox == 6) {
+				mapPelanggan.put("input ke", inputKe+1);
+				
+				TimbangVO timbang = new TimbangVO();
+				System.out.println("--> timbang : " + timbang.getGross());
+				if(timbang.getGross().toString().equals("0.00")){
+					MessageBox.alert("Tidak ada value pada timbangan, atau timbangan tidak terhubung pada komputer");
+				}else{
+					// untuk di lempar ke session kamera
+					String strFolder = generateOrReplaceFolder();
+					String strAWB = generateAWB();
+					String strFileName = strAWB + ".png";
+					TempUtil.saveFotoTimbangCamera(strAWB, strFolder, strFileName);
+					
+					// capture
+					slr.shoot();
+					
+					Map<String, Object> mapCam = TempUtil.loadFotoTimbangCamera();				
+					TtPotoTimbang potoPaket = transactionFotoTimbang(strAWB, mapPelanggan, mapCam, timbang, inputKe);
+	
+					PrintUtilNew PU = new PrintUtilNew(potoPaket.getAwbData(), timbang.getGross().toString(),
+							Integer.parseInt(timbang.getGrossRoundUp().toString()), usr.getIdUser());
+					PU.print();
+					this.populateForm(mapPelanggan, mapCam);
+				}
+			}
+		} else {
+			TimbangVO timbang = new TimbangVO();
+			
+			System.out.println("--> timbang : " + timbang.getGross());
+			if(timbang.getGross().toString().equals("0.00")){
+				MessageBox.alert("Tidak ada value pada timbangan, atau timbangan tidak terhubung pada komputer");
+			}else{
+				// untuk di lempar ke session kamera
+				String strFolder = generateOrReplaceFolder();
+				String strAWB = generateAWB();
+				String strFileName = strAWB + ".png";
+				TempUtil.saveFotoTimbangCamera(strAWB, strFolder, strFileName);
+				
+				// capture
+				slr.shoot();
+				
+				Map<String, Object> mapCam = TempUtil.loadFotoTimbangCamera();				
+				TtPotoTimbang potoPaket = transactionFotoTimbang(strAWB, mapPelanggan, mapCam, timbang, inputKe);
+	
+//				PrintUtilNew PU = new PrintUtilNew(potoPaket.getAwbData(), timbang.getGross().toString(),
+//						Integer.parseInt(timbang.getGrossRoundUp().toString()), usr.getIdUser());
+//				PU.print();
+				this.populateForm(mapPelanggan, mapCam);		}
+			}
+	}
 	
 	private TextField initTextFieldHitungVolume(TextField txt) {
 		txt.textProperty().addListener((observable, oldValue, newValue) -> {
