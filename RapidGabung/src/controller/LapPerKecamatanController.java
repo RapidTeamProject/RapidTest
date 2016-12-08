@@ -35,6 +35,7 @@ import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.WindowsHelper;
+import util.formatRupiah;
 
 public class LapPerKecamatanController implements Initializable {
 	
@@ -289,8 +290,8 @@ public class LapPerKecamatanController implements Initializable {
 	public void SetTable(){
 		List<Map> result = LaporanPerKecamatanService.getLaporanByParam(DateUtil.convertToDatabaseColumn(dpAwal.getValue()), DateUtil.convertToDatabaseColumn(dpAkhir.getValue()), (String) cmbKodePerwakilan.getSelectionModel().getSelectedItem().toString());
 		Integer no = 0;
-		Integer harga = 0;
-		Integer berat = 0;
+		long harga = 0;
+		double berat = 0.00;
 		for (Map obj : result) {
 			no++;
 			LapPerKecamatanTV row = new LapPerKecamatanTV(
@@ -306,16 +307,16 @@ public class LapPerKecamatanController implements Initializable {
 					(String) obj.get("PROPINSI"),
 					(String) obj.get("LAYANAN"),
 					new Integer((Integer) obj.get("HARGA")).toString());
-			harga += new Integer((Integer) obj.get("HARGA"));
-//			berat += new Integer((Integer) obj.get("PBCLOSE"));
-			System.out.println("berat ke : " + no + " adalah " + (String) obj.get("PBCLOSE"));
-			berat += Integer.valueOf((String) obj.get("PBCLOSE"));
+//			harga += new Integer((Integer) obj.get("HARGA"));
+			harga += Long.parseLong(obj.get("HARGA").toString());
+//			berat += Integer.valueOf((String) obj.get("PBCLOSE"));
+			berat += Double.valueOf((String)obj.get("PBCLOSE"));
 			masterData.add(row);
 		}
 		
 		lblPaket.setText(no.toString());
-		lblHarga.setText(harga.toString());
-		lblBerat.setText(berat.toString());
+		lblHarga.setText(String.valueOf(harga));
+		lblBerat.setText(String.valueOf(berat));
 		
 		noCol.setCellValueFactory(cellData -> cellData.getValue().getNoProperty());
 		awbCol.setCellValueFactory(cellData -> cellData.getValue().getAwbProperty());

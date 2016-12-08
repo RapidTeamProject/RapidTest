@@ -12,6 +12,11 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import VO.EntryDataShowVO;
 import VO.LaporanPenerimaVO;
@@ -447,97 +452,100 @@ public class ExportToExcell {
 			String dateFile) {
 			try {
 			FileOutputStream fileOut = new FileOutputStream("C:/DLL/REPORT/EXPORT/" + dateFile  + " " + title + ".xls");
-			HSSFWorkbook workbook = new HSSFWorkbook();
-			HSSFSheet worksheet = workbook.createSheet(title);
-			HSSFRow row1 = null;
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			XSSFSheet worksheet = workbook.createSheet(title);
+			XSSFRow row1 = null;
+//			HSSFWorkbook workbook = new HSSFWorkbook();
+//			HSSFSheet worksheet = workbook.createSheet(title);
+//			HSSFRow row1 = null;
 			
 			int no=0;
 			row1 = worksheet.createRow((short) no++);
 			
-			HSSFCell cellNo = row1.createCell((short) 0);
+			XSSFCell cellNo = row1.createCell((short) 0);
 			cellNo.setCellValue("NO");
 			
-			HSSFCell cellAwb = row1.createCell((short) 1);
+			XSSFCell cellAwb = row1.createCell((short) 1);
 			cellAwb.setCellValue("AWB");
 	
-			HSSFCell cellTgl= row1.createCell((short) 2);
+			XSSFCell cellTgl= row1.createCell((short) 2);
 			cellTgl.setCellValue("TANGGAL");
 			
 //			HSSFCell cellPenerima= row1.createCell((short) 3);
 //			cellPenerima.setCellValue("PENERIMA");
 			
-			HSSFCell cellTujuan= row1.createCell((short) 3);
+			XSSFCell cellTujuan= row1.createCell((short) 3);
 			cellTujuan.setCellValue("TUJUAN");
 			
-			HSSFCell cellPerwakilan= row1.createCell((short) 4);
+			XSSFCell cellPerwakilan= row1.createCell((short) 4);
 			cellPerwakilan.setCellValue("PERWAKILAN");
 			
 			//FA
-			HSSFCell cellZona= row1.createCell((short) 5);
+			XSSFCell cellZona= row1.createCell((short) 5);
 			cellZona.setCellValue("ZONA");
 			
-			HSSFCell cellKecamatan= row1.createCell((short) 6);
+			XSSFCell cellKecamatan= row1.createCell((short) 6);
 			cellKecamatan.setCellValue("KECAMATAN");
 			
-			HSSFCell cellKabupaten= row1.createCell((short) 7);
+			XSSFCell cellKabupaten= row1.createCell((short) 7);
 			cellKabupaten.setCellValue("KABUPATEN");
 			
-			HSSFCell cellPropinsi= row1.createCell((short) 8);
+			XSSFCell cellPropinsi= row1.createCell((short) 8);
 			cellPropinsi.setCellValue("PROPINSI");
 			
-			HSSFCell cellLayanan= row1.createCell((short) 9);
+			XSSFCell cellLayanan= row1.createCell((short) 9);
 			cellLayanan.setCellValue("LAYANAN");
 			
-			HSSFCell cellHarga= row1.createCell((short) 10);
+			XSSFCell cellHarga= row1.createCell((short) 10);
 			cellHarga.setCellValue("HARGA");
 			
-			HSSFCellStyle cellStyle = workbook.createCellStyle();
+			XSSFCellStyle cellStyle = workbook.createCellStyle();
 			cellStyle.setFillForegroundColor(HSSFColor.GOLD.index);
 			cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);	
 			cellStyle = workbook.createCellStyle();
 			cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy"));
 			
-			int noCol=1;
+			Integer noCol=1;
 			for (LapPerKecamatanTV data : masterData) {
 			
-				row1 = worksheet.createRow((short) no++);
+				row1 = worksheet.createRow((Integer) no++);
 				
-				HSSFCell cellA0 = row1.createCell((short) 0);
+				XSSFCell cellA0 = row1.createCell((short) 0);
 				cellA0.setCellValue(noCol++);
 				
-				HSSFCell cellA1 = row1.createCell((short) 1);
+				XSSFCell cellA1 = row1.createCell((short) 1);
 				cellA1.setCellValue(data.getAwb());
 				
-				HSSFCell cellB1 = row1.createCell((short) 2);
+				XSSFCell cellB1 = row1.createCell((short) 2);
 				cellB1.setCellValue(data.getTglCreate());
 				cellB1.setCellStyle(cellStyle);
 				
 //				HSSFCell cellC1 = row1.createCell((short) 3);
 //				cellC1.setCellValue(data.getPenerima());
 				
-				HSSFCell cellC1 = row1.createCell((short) 3);
+				XSSFCell cellC1 = row1.createCell((short) 3);
 				cellC1.setCellValue(data.getTujuan());
 				
-				HSSFCell cellD1 = row1.createCell((short) 4);
+				XSSFCell cellD1 = row1.createCell((short) 4);
 				cellD1.setCellValue(data.getKodePerwakilan());
 				
 				//FA
-				HSSFCell cellE1 = row1.createCell((short) 5);
+				XSSFCell cellE1 = row1.createCell((short) 5);
 				cellE1.setCellValue(data.getZona());
 				
-				HSSFCell cellF1 = row1.createCell((short) 6);
+				XSSFCell cellF1 = row1.createCell((short) 6);
 				cellF1.setCellValue(data.getKecamatan());
 				
-				HSSFCell cellG1 = row1.createCell((short) 7);
+				XSSFCell cellG1 = row1.createCell((short) 7);
 				cellG1.setCellValue(data.getKabupaten());
 				
-				HSSFCell cellH1 = row1.createCell((short) 8);
+				XSSFCell cellH1 = row1.createCell((short) 8);
 				cellH1.setCellValue(data.getPropinsi());
 				
-				HSSFCell cellI1 = row1.createCell((short) 9);
+				XSSFCell cellI1 = row1.createCell((short) 9);
 				cellI1.setCellValue(data.getLayanan());
 				
-				HSSFCell cellJ1 = row1.createCell((short) 10);
+				XSSFCell cellJ1 = row1.createCell((short) 10);
 				cellJ1.setCellValue(data.getHarga());
 				
 				
@@ -545,8 +553,8 @@ public class ExportToExcell {
 			workbook.write(fileOut);
 			fileOut.flush();
 			fileOut.close();
-		} catch (FileNotFoundException x) {
-			x.printStackTrace();
+//		} catch (FileNotFoundException x) {
+//			x.printStackTrace();
 		} catch (IOException x) {
 			x.printStackTrace();
 		}

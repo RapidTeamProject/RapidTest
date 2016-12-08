@@ -49,6 +49,7 @@ public class ReportService {
 			Date dtAkhir, 
 			String kodePerwakilan, 
 			String kodePelanggan) {
+		System.out.println("kodePelanggan : " + kodePelanggan);
 		Session s = HibernateUtil.openSession();
 		String sql="select z.kode_perwakilan, count(z.kode_perwakilan) AWB, "
 				+ "sum(z.pbclose) BERAT, sum(z.total_biaya) TOTAL_BIAYA, maxKardus(z.kode_perwakilan) "
@@ -59,6 +60,7 @@ public class ReportService {
 					sql += "and left(z.asal_paket,3) = '"+kodePerwakilan+"'";
 				}
 				if(kodePelanggan!=null){
+				System.out.println("masuk if");
 				sql += "and z.pengirim = '"+kodePelanggan+"'";
 				}
 				sql += "and z.kode_perwakilan is not null group by z.kode_perwakilan";
