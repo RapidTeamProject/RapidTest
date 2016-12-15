@@ -923,6 +923,27 @@ public class MenuController implements Initializable {
 			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+
+	//HENDRY: tambah menu Laporan Komisi
+	public void onLaporanKomisi(Event evt){
+		try {
+			ManagedFormHelper.kodeDokumenPabean = "Laporan Komisi";
+			HBox bodyHBox = new HBox();
+			FXMLLoader menu = new FXMLLoader(getClass().getResource("LaporanKomisi.fxml"));
+			ScrollPane menuPage = (ScrollPane) menu.load();
+			bodyHBox.getChildren().add(menuPage);
+			bodyHBox.setAlignment(Pos.CENTER);
+			// WindowsHelper.rootLayout.setCenter(null);
+
+			if (WindowsHelper.rootLayout != null) {
+				WindowsHelper.rootLayout.setCenter(bodyHBox);
+			}
+
+		} catch (IOException ex) {
+			Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	//HENDRY
 	
 	@FXML
 	public void onLaporanPOD(Event evt) {

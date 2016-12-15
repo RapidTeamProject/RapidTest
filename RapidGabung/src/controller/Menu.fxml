@@ -415,6 +415,19 @@
 									</children>
 								</AnchorPane>
 
+								<!-- hendry -->
+								<!-- tambah menu laporan komisi -->
+								<AnchorPane fx:id="mnLaporanKomisi" prefHeight="150.0" prefWidth="115.0">
+									<children>
+										<Button id="btnLaporanKomisi" layoutX="19.0" layoutY="9.0" mnemonicParsing="false" onAction="#onLaporanKomisi" prefHeight="115.0" prefWidth="115.0" styleClass="button-menu">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Button>
+										<Label layoutX="43.0" layoutY="127.0" text="Laporan Komisi" textFill="BLACK" />
+									</children>
+								</AnchorPane>
+								<!-- end hendry -->
 							</children>
 							<padding>
 								<Insets bottom="10.0" top="10.0" />
