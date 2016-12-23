@@ -37,6 +37,7 @@ import util.ExportToExcell;
 import util.ManagedFormHelper;
 import util.MessageBox;
 import util.WindowsHelper;
+import util.formatRupiah;
 
 public class LapPerKecamatanController implements Initializable {
 	
@@ -113,7 +114,7 @@ public class LapPerKecamatanController implements Initializable {
 		}
 
 		lblPaket.setText(String.valueOf(totalPaket));
-		lblHarga.setText(String.valueOf(totalHarga));
+		lblHarga.setText(formatRupiah.formatIndonesia(Integer.valueOf(String.valueOf(totalHarga))));
 		lblBerat.setText(String.valueOf(totalBerat));
 		
 	}
@@ -354,7 +355,7 @@ public class LapPerKecamatanController implements Initializable {
 		}
 		
 		lblPaket.setText(no.toString());
-		lblHarga.setText(String.valueOf(harga));
+		lblHarga.setText(formatRupiah.formatIndonesiaTanpaKoma(String.valueOf(harga)));
 		lblBerat.setText(String.valueOf(berat));
 		
 		noCol.setCellValueFactory(cellData -> cellData.getValue().getNoProperty());
