@@ -346,7 +346,21 @@ public class DateUtil
 		
 
 		return result;
-	}	
+	}
+	
+	public static String getStdDateDisplayDash(Date d){
+		String result="-";
+		
+		if(d!=null){
+			Format f = new SimpleDateFormat("dd-MM-yyyy");
+			//result = f.format(d)+" WIB";
+			result = f.format(d);
+		}
+		
+
+		return result;
+	}
+	
 	public static String getStdDateDisplay2(Date d){
 		if(d!=null){
 			Calendar cal = Calendar.getInstance();

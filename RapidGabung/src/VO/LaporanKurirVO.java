@@ -12,6 +12,11 @@ public class LaporanKurirVO {
 	private StringProperty totalRemaining;
 	private StringProperty totalPercentage;
 	
+	//Detail
+	private StringProperty name;
+	private StringProperty jumlahKirim;
+	private StringProperty jumlahTerima;
+	
 	//Footer
 	private StringProperty au;
 	private StringProperty ba;
@@ -22,12 +27,37 @@ public class LaporanKurirVO {
 	private StringProperty jne;
 	private StringProperty total;
 	
-	//Header && Detail
+	//Header
 	public LaporanKurirVO (String date, String totalDeliver, String totalReceive, String totalRemaining, String totalPercentage) {
 		this.date = new SimpleStringProperty(date);
 		this.totalDeliver = new SimpleStringProperty(totalDeliver);
 		this.totalReceive = new SimpleStringProperty(totalReceive);
 		this.totalRemaining = new SimpleStringProperty(totalRemaining);
+		this.totalPercentage = new SimpleStringProperty(totalPercentage);
+	}
+	
+	//Detail
+//	public LaporanKurirVO (String name, String totalDeliver, String totalReceive, String totalRemaining, String jumlahKirim, String jumlahTerima, String totalPercentage) {
+//		this.name = new SimpleStringProperty(name);
+//		this.totalDeliver = new SimpleStringProperty(totalDeliver);
+//		this.totalReceive = new SimpleStringProperty(totalReceive);
+//		this.totalRemaining = new SimpleStringProperty(totalRemaining);
+//		this.jumlahKirim = new SimpleStringProperty(jumlahKirim);
+//		this.jumlahTerima = new SimpleStringProperty(jumlahTerima);
+//		this.totalPercentage = new SimpleStringProperty(totalPercentage);
+//	}
+	
+	public LaporanKurirVO (String name, String totalDeliver, String totalReceive, String totalRemaining, String jumlahTerima, String totalPercentage) {
+		this.name = new SimpleStringProperty(name);
+		this.totalDeliver = new SimpleStringProperty(totalDeliver);
+		this.totalReceive = new SimpleStringProperty(totalReceive);
+		this.totalRemaining = new SimpleStringProperty(totalRemaining);
+		this.jumlahTerima = new SimpleStringProperty(jumlahTerima);
+		this.totalPercentage = new SimpleStringProperty(totalPercentage);
+	}
+	
+	public LaporanKurirVO (String name, String totalPercentage) {
+		this.name = new SimpleStringProperty(name);
 		this.totalPercentage = new SimpleStringProperty(totalPercentage);
 	}
 	
@@ -101,6 +131,44 @@ public class LaporanKurirVO {
 
 	public StringProperty getTotalPercentageProperty() {
 		return totalPercentage;
+	}
+	
+	//Detail
+	
+	public String getName() {
+		return name.get();
+	}
+	
+	public void setName(String name) {
+		this.name.set(name);
+	}
+
+	public StringProperty getNameProperty() {
+		return name;
+	}
+	
+	public String getJumlahKirim() {
+		return jumlahKirim.get();
+	}
+	
+	public void setJumlahKirim(String jumlahKirim) {
+		this.jumlahKirim.set(jumlahKirim);
+	}
+
+	public StringProperty getJumlahKirimProperty() {
+		return jumlahKirim;
+	}
+	
+	public String getJumlahTerima() {
+		return jumlahTerima.get();
+	}
+	
+	public void setJumlahTerima(String jumlahTerima) {
+		this.jumlahTerima.set(jumlahTerima);
+	}
+
+	public StringProperty getJumlahTerimaProperty() {
+		return jumlahTerima;
 	}
 	
 	//Footer

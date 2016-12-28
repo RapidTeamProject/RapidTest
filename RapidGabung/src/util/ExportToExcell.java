@@ -11,10 +11,8 @@ import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -915,12 +913,9 @@ public class ExportToExcell {
 	
 	//FA
 	public static void exportToReportKurir (ObservableList<LaporanKurirVO> masterDataHeader, ObservableList<LaporanKurirVO> masterDataDetail, 
-		ObservableList<LaporanKurirVO> masterDataFooter, String title) {
+			ObservableList<LaporanKurirVO> masterDataDetail2, ObservableList<LaporanKurirVO> masterDataFooter, String title) {
 		try {
 			FileOutputStream fileOut = new FileOutputStream("C:/DLL/REPORT/EXPORT/"+ title + ".xls");
-//			HSSFWorkbook workbook = new HSSFWorkbook();
-//				HSSFSheet worksheet = workbook.createSheet(title);
-//				HSSFRow row1 = null;
 				
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet worksheet = workbook.createSheet(title);
@@ -938,6 +933,9 @@ public class ExportToExcell {
 			
 			int no=0;
 			int countCol = 0;
+			
+			int startPersentase = 0;
+			int persenSize = 1;
 			
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1049,6 +1047,13 @@ public class ExportToExcell {
 				cellTgl.setCellValue(Double.valueOf(masterDataHeader.get(i).getTotalPercentage()));
 				cellTgl.setCellStyle(cellStyle);
 			}
+			
+			startPersentase = countCol + 2;
+			
+			XSSFCell cellTitle = row1.createCell((short) startPersentase++);
+			cellTitle.setCellValue("Persenstase keberhasilan pengiriman (di urutkan dr yg terbaik)");
+			
+			startPersentase = 0;
 				
 			row1 = worksheet.createRow((short) no++);
 			
@@ -1076,7 +1081,7 @@ public class ExportToExcell {
 					worksheet.addMergedRegion(new CellRangeAddress(colNoStart, colNoEnd, 0, 0));
 						
 					XSSFCell cellName = row1.createCell((short) 1);
-					cellName.setCellValue(masterDataDetail.get(i).getDate());
+					cellName.setCellValue(masterDataDetail.get(i).getName());
 					cellName.setCellStyle(cellStyle);
 					worksheet.addMergedRegion(new CellRangeAddress(colNameStart, colNameEnd, 1, 1));
 						
@@ -1089,7 +1094,7 @@ public class ExportToExcell {
 					cellKirimV.setCellStyle(cellStyle);
 						
 					for (int j = 0; j < masterDataDetail.size(); j++) {
-						if (j > 0 && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+						if (j > 0 && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 							colValue++;
 							XSSFCell cellKirimVL = row1.createCell((short) colValue);
 							cellKirimVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalDeliver()));
@@ -1100,13 +1105,22 @@ public class ExportToExcell {
 					for (int k = colValue; k <= countCol; k++) {
 						if (k != colValue) {
 							XSSFCell cellKirimVL = row1.createCell((short) k);
-							cellKirimVL.setCellValue("");
+							cellKirimVL.setCellValue(0);
 							cellKirimVL.setCellStyle(cellStyle);
 						}
 							
 					}
 					
+					startPersentase = countCol + 2;
+					
+					XSSFCell cellNamaKurir = row1.createCell((short) startPersentase++);
+					cellNamaKurir.setCellValue(masterDataDetail2.get(i).getName());
+					
+					XSSFCell cellKurirPersentase = row1.createCell((short) startPersentase++);
+					cellKurirPersentase.setCellValue(masterDataDetail2.get(i).getTotalPercentage());
+					
 					colValue = 3;
+					startPersentase = 0;
 						
 					row1 = worksheet.createRow((short) no++);
 						
@@ -1123,7 +1137,7 @@ public class ExportToExcell {
 					cellTerimaV.setCellStyle(cellStyle);
 						
 					for (int j = 0; j < masterDataDetail.size(); j++) {
-						if (j > 0 && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+						if (j > 0 && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 							colValue++;
 							XSSFCell cellTerimaVL = row1.createCell((short) colValue);
 							cellTerimaVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalReceive()));
@@ -1134,7 +1148,7 @@ public class ExportToExcell {
 					for (int k = colValue; k <= countCol; k++) {
 						if (k != colValue) {
 							XSSFCell cellKirimVL = row1.createCell((short) k);
-							cellKirimVL.setCellValue("");
+							cellKirimVL.setCellValue(0);
 							cellKirimVL.setCellStyle(cellStyle);
 						}
 							
@@ -1157,7 +1171,7 @@ public class ExportToExcell {
 					cellSisaV.setCellStyle(cellStyle);
 						
 					for (int j = 0; j < masterDataDetail.size(); j++) {
-						if (j > 0 && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+						if (j > 0 && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 							colValue++;
 							XSSFCell cellSisaVL = row1.createCell((short) colValue);
 							cellSisaVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalRemaining()));
@@ -1168,7 +1182,7 @@ public class ExportToExcell {
 					for (int k = colValue; k <= countCol; k++) {
 						if (k != colValue) {
 							XSSFCell cellKirimVL = row1.createCell((short) k);
-							cellKirimVL.setCellValue("");
+							cellKirimVL.setCellValue(0);
 							cellKirimVL.setCellStyle(cellStyle);
 						}
 							
@@ -1177,12 +1191,12 @@ public class ExportToExcell {
 					colValue = 3;
 						
 					XSSFCell cellTotalV = row1.createCell((short) colTotal);
-					cellTotalV.setCellValue(Integer.valueOf(masterDataDetail.get(i).getTotalPercentage()));
+					cellTotalV.setCellValue(Integer.valueOf(masterDataDetail.get(i).getJumlahTerima()));
 					cellTotalV.setCellStyle(cellStyle);
 				}
 					
 				if (i > 0) {
-					if (!masterDataDetail.get(i-1).getDate().equals(masterDataDetail.get(i).getDate())) {
+					if (!masterDataDetail.get(i-1).getName().equals(masterDataDetail.get(i).getName())) {
 						row1 = worksheet.createRow((short) no++);
 						colNoStart += 3;
 						colNoEnd += 3;
@@ -1196,7 +1210,7 @@ public class ExportToExcell {
 						worksheet.addMergedRegion(new CellRangeAddress(colNoStart, colNoEnd, 0, 0));
 							
 						XSSFCell cellName = row1.createCell((short) 1);
-						cellName.setCellValue(masterDataDetail.get(i).getDate());
+						cellName.setCellValue(masterDataDetail.get(i).getName());
 						cellName.setCellStyle(cellStyle);
 						worksheet.addMergedRegion(new CellRangeAddress(colNameStart, colNameEnd, 1, 1));
 							
@@ -1209,7 +1223,7 @@ public class ExportToExcell {
 						cellKirimV.setCellStyle(cellStyle);
 							
 						for (int j = 0; j < masterDataDetail.size(); j++) {
-							if (j > i && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+							if (j > i && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 								colValue++;
 								XSSFCell cellKirimVL = row1.createCell((short) colValue);
 								cellKirimVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalDeliver()));
@@ -1220,13 +1234,24 @@ public class ExportToExcell {
 						for (int k = colValue; k <= countCol; k++) {
 							if (k != colValue) {
 								XSSFCell cellKirimVL = row1.createCell((short) k);
-								cellKirimVL.setCellValue("");
+								cellKirimVL.setCellValue(0);
 								cellKirimVL.setCellStyle(cellStyle);
 							}
 								
 						}
 						
+						startPersentase = countCol + 2;
+						
+						XSSFCell cellNamaKurir = row1.createCell((short) startPersentase++);
+						cellNamaKurir.setCellValue(masterDataDetail2.get(persenSize).getName());
+
+						XSSFCell cellKurirPersentase = row1.createCell((short) startPersentase++);
+						cellKurirPersentase.setCellValue(masterDataDetail2.get(persenSize).getTotalPercentage());
+
+						persenSize++;
+							
 						colValue = 3;
+						startPersentase = 0;
 							
 						row1 = worksheet.createRow((short) no++);
 							
@@ -1243,7 +1268,7 @@ public class ExportToExcell {
 						cellTerimaV.setCellStyle(cellStyle);
 							
 						for (int j = 0; j < masterDataDetail.size(); j++) {
-							if (j > i && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+							if (j > i && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 								colValue++;
 								XSSFCell cellTerimaVL = row1.createCell((short) colValue);
 								cellTerimaVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalReceive()));
@@ -1254,7 +1279,7 @@ public class ExportToExcell {
 						for (int k = colValue; k <= countCol; k++) {
 							if (k != colValue) {
 								XSSFCell cellKirimVL = row1.createCell((short) k);
-								cellKirimVL.setCellValue("");
+								cellKirimVL.setCellValue(0);
 								cellKirimVL.setCellStyle(cellStyle);
 							}
 								
@@ -1277,7 +1302,7 @@ public class ExportToExcell {
 						cellSisaV.setCellStyle(cellStyle);
 							
 						for (int j = 0; j < masterDataDetail.size(); j++) {
-							if (j > i && masterDataDetail.get(i).getDate().equals(masterDataDetail.get(j).getDate())) {
+							if (j > i && masterDataDetail.get(i).getName().equals(masterDataDetail.get(j).getName())) {
 								colValue++;
 								XSSFCell cellSisaVL = row1.createCell((short) colValue);
 								cellSisaVL.setCellValue(Integer.valueOf(masterDataDetail.get(j).getTotalRemaining()));
@@ -1287,9 +1312,8 @@ public class ExportToExcell {
 							
 						for (int k = colValue; k <= countCol; k++) {
 							if (k != colValue) {
-								System.out.println("masuk ke if dan set di col : " + k);
 								XSSFCell cellKirimVL = row1.createCell((short) k);
-								cellKirimVL.setCellValue("");
+								cellKirimVL.setCellValue(0);
 								cellKirimVL.setCellStyle(cellStyle);
 							}
 								
@@ -1298,7 +1322,7 @@ public class ExportToExcell {
 						colValue = 3;
 							
 						XSSFCell cellTotalV = row1.createCell((short) colTotal);
-						cellTotalV.setCellValue(Integer.valueOf(masterDataDetail.get(i).getTotalPercentage()));
+						cellTotalV.setCellValue(Integer.valueOf(masterDataDetail.get(i).getJumlahTerima()));
 						cellTotalV.setCellStyle(cellStyle);
 					}
 				}
@@ -1315,18 +1339,6 @@ public class ExportToExcell {
 				cellAuV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getAu()));
 				cellAuV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 			
@@ -1339,18 +1351,6 @@ public class ExportToExcell {
 				cellBaV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getBa()));
 				cellBaV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1363,18 +1363,6 @@ public class ExportToExcell {
 				cellCodaV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getCoda()));
 				cellCodaV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1387,18 +1375,6 @@ public class ExportToExcell {
 				cellCodaV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getNth()));
 				cellCodaV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1411,18 +1387,6 @@ public class ExportToExcell {
 				cellCneeV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getCnee()));
 				cellCneeV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1435,18 +1399,6 @@ public class ExportToExcell {
 				cellMissV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getMiss()));
 				cellMissV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1459,18 +1411,6 @@ public class ExportToExcell {
 				cellJneV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getJne()));
 				cellJneV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				
@@ -1483,18 +1423,6 @@ public class ExportToExcell {
 				cellTotalV.setCellValue(Integer.valueOf(masterDataFooter.get(i).getTotal()));
 				cellTotalV.setCellStyle(cellStyle);
 			}
-			
-			for (int k = colValue; k <= countCol; k++) {
-				if (k != colValue) {
-					System.out.println("masuk ke if dan set di col : " + k);
-					XSSFCell cellKirimVL = row1.createCell((short) k);
-					cellKirimVL.setCellValue("");
-					cellKirimVL.setCellStyle(cellStyle);
-				}
-					
-			}
-			
-			colValue = 3;
 				
 			row1 = worksheet.createRow((short) no++);
 				

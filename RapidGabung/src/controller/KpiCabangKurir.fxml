@@ -36,14 +36,12 @@
 				<Label layoutX="301.0" layoutY="77.0" text="s/d" />
 				<TableView fx:id="tvLapKurirCabang" editable="true" layoutX="50.0" layoutY="154.0" prefHeight="327.0" prefWidth="1272.0">
 					<columns>
-						<TableColumn fx:id="colNo" prefWidth="53.0" text="NO" />
 						<TableColumn fx:id="colTanggal" prefWidth="140.0" text="TANGGAL" />
 						<TableColumn fx:id="colKdPerwakilan" prefWidth="140.0" text="KODE PERWAKILAN" />
-                  		<TableColumn fx:id="colSales" editable="true" prefWidth="121.0" text="SALES" />
 						<TableColumn fx:id="colKirim" prefWidth="140.0" text="KIRIM" />
 						<TableColumn fx:id="colTerima" prefWidth="140.0" text="TERIMA" />
 						<TableColumn fx:id="colSisa" prefWidth="140.0" text="SISA" />
-						<TableColumn fx:id="colTotal" prefWidth="140.0" text="TOTAL" />
+						<TableColumn fx:id="colPersen" prefWidth="140.0" text="PERSENTASE" />
 					</columns>
 				</TableView>
             <TextField fx:id="txtCari" layoutX="1082.0" layoutY="101.0" prefHeight="25.0" prefWidth="174.0" />
