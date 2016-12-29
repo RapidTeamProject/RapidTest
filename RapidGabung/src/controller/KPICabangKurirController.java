@@ -300,6 +300,12 @@ public class KPICabangKurirController implements Initializable {
 	@FXML
 	public void onClikExcel(){
 		try {
+			Date dateAwl = DateUtil.convertToDatabaseColumn(dpAwal.getValue());
+			Date dateAkh = DateUtil.convertToDatabaseColumn(dpAkhir.getValue());
+			
+			String dateFile = DateUtil.getDateNotSeparator(dateAwl)+" sd "+DateUtil.getDateNotSeparator(dateAkh).substring(4);
+			String title = "KPI_Kurir_Per_Cabang("+cmbPerwakilan.getSelectionModel().getSelectedItem().toString()+")";
+			
 //			setDataHeader();
 			setDataDetail();
 //			setDataFooter();
@@ -307,10 +313,11 @@ public class KPICabangKurirController implements Initializable {
 			System.out.println("masterDetail size : " + masterDetail.size());
 			System.out.println("masterDetail2 size : " + masterDetail2.size());
 			System.out.println("masterFooter size : " + masterFooter.size());
-			ExportToExcell.exportToReportKurir(masterHeader, masterDetail, masterDetail2, masterFooter, "cetak KPI Kurir");
+			ExportToExcell.exportToReportKurir(masterHeader, masterDetail, masterDetail2, masterFooter, title , dateFile);
 			
 			MessageBox.alert("Export Berhasil Di Drive C:/DLL/REPORT/EXPORT/"
-					+ " cetak KPI Kurir.xls");
+					+dateFile
+					+ " " + title + ".xls");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

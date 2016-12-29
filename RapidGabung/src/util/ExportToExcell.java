@@ -913,9 +913,9 @@ public class ExportToExcell {
 	
 	//FA
 	public static void exportToReportKurir (ObservableList<LaporanKurirVO> masterDataHeader, ObservableList<LaporanKurirVO> masterDataDetail, 
-			ObservableList<LaporanKurirVO> masterDataDetail2, ObservableList<LaporanKurirVO> masterDataFooter, String title) {
+			ObservableList<LaporanKurirVO> masterDataDetail2, ObservableList<LaporanKurirVO> masterDataFooter, String title, String dateFile) {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("C:/DLL/REPORT/EXPORT/"+ title + ".xls");
+			FileOutputStream fileOut = new FileOutputStream("C:/DLL/REPORT/EXPORT/" + dateFile  + " " + title + ".xls");
 				
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet worksheet = workbook.createSheet(title);
